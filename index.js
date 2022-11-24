@@ -53,6 +53,21 @@ async function run() {
             const result = await userCollection.insertOne(user);
             res.send(result)
         })
+        app.get('/allUsers/admin/:email', async (req, res) => {
+            const email = req.params.email;
+            const query = { email }
+            const user = await userCollection.findOne(query);
+            res.send({ isAdmin: user?.role === 'admin' })
+
+        })
+        app.get('/allUsers/admin/:email', async (req, res) => {
+            const email = req.params.email;
+            const query = { email }
+            const user = await userCollection.findOne(query);
+            // console.log(user?.role);
+            res.send({ isAdmin: user?.role === 'admin' })
+
+        })
 
     }
     finally {
