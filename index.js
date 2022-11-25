@@ -35,7 +35,7 @@ async function run() {
             res.send(result);
         })
 
-        app.put('/allproduct/reported/:id',async (req, res) => {
+        app.put('/allproduct/reported/:id', async (req, res) => {
             const id = req.params.id;
             const filter = { _id: ObjectId(id) }
             const options = { upsert: true }
@@ -110,7 +110,7 @@ async function run() {
             res.send({ isSeller: user?.role === 'Seller' })
 
         })
-        app.put('/allUsers/verify/:id',async (req, res) => {
+        app.put('/allUsers/verify/:id', async (req, res) => {
             const id = req.params.id;
             const filter = { _id: ObjectId(id) }
             const options = { upsert: true }
@@ -140,8 +140,30 @@ async function run() {
             }
             const products = await ProductCollection.find(query).toArray();
             res.send(products.reverse());
+        })
+        // is advertise
+        app.put('/allproduct/advertise/:id', async (req, res) => {
+            const id = req.params.id;
+            const filter = { _id: ObjectId(id) }
+            const options = { upsert: true }
+            const updatedDoc = {
+                $set: {
+                    isAdvertise: 'advertise'
+                }
+            }
+            const result = await ProductCollection.updateOne(filter, updatedDoc, options);
+            res.send(result);
+        })
+
+        app.get('/advertise/product/', async (req, res) => {
+            const query = {
+                item: 'available',
+                isAdvertise: 'advertise'
+            }
+            
 
         })
+
 
     }
     finally {
