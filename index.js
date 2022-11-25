@@ -56,7 +56,12 @@ async function run() {
             res.send(products);
         })
 
-        
+        app.delete('/reportedItem/:id', async (req, res) => {
+            const id = req.params.id
+            const query = { _id: ObjectId(id) }
+            const result = await ProductCollection.deleteOne(query);
+            res.send(result)
+        })
 
         app.get('/category-product/:name', async (req, res) => {
             const brand = req.params.name;
