@@ -22,6 +22,7 @@ async function run() {
         const CategoryCollection = client.db("laptop-bazar").collection("category");
         const ProductCollection = client.db("laptop-bazar").collection("products");
         const userCollection = client.db("laptop-bazar").collection("users");
+        const bookingsProductCollection = client.db("laptop-bazar").collection("bookedProduct");
 
         app.get('/category', async (req, res) => {
             const query = {}
@@ -155,13 +156,27 @@ async function run() {
             res.send(result);
         })
 
-        app.get('/advertise/product/', async (req, res) => {
+        app.get('/advertise/product', async (req, res) => {
             const query = {
                 item: 'available',
                 isAdvertise: 'advertise'
             }
-            
+            const result = await ProductCollection.find(query).toArray();
+            res.send(result);
 
+        })
+        app.post('/booking/product', async (req, res) => {
+            const product = req.body;
+            const result = await bookingsProductCollection.insertOne(product);
+            res.send(result)
+        })
+        app.get('/booked/product/:email', async (req, res) => {
+            const email = req.params.email;
+            const query = {
+                email
+            }
+            const result = await bookingsProductCollection.find(query).toArray();
+            res.send(result.reverse())
         })
 
 
