@@ -129,6 +129,19 @@ async function run() {
             const result = await userCollection.deleteOne(query);
             res.send(result)
         })
+        app.get('/myproduct', async (req, res) => {
+            const email = req.query.email;
+            // const decodedEmail = req.decoded.email
+            // if (email !== decodedEmail) {
+            //     return res.status(401).send('Unathorize access')
+            // }
+            const query = {
+                email: email,
+            }
+            const products = await ProductCollection.find(query).toArray();
+            res.send(products.reverse());
+
+        })
 
     }
     finally {
