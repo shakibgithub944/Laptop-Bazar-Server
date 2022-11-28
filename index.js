@@ -61,6 +61,12 @@ async function run() {
             res.send(result);
         })
 
+        app.get('/toshoping', async (req, res) => {
+            const query = {}
+            const result = await ProductCollection.find(query).toArray();
+            res.send(result)
+        })
+
         app.put('/allproduct/reported/:id', async (req, res) => {
             const id = req.params.id;
             const filter = { _id: ObjectId(id) }
@@ -128,16 +134,17 @@ async function run() {
             const user = req.body;
             const email = user.email
             const name = user.name
-            console.log(user);
+            const role = user.role
             const query = { email }
             const options = { upsert: true }
             const updatedDoc = {
                 $set: {
                     email: email,
                     name: name,
-                    role: 'Buyer'
+                    role: role
                 }
             }
+
             const result = await userCollection.updateOne(query, updatedDoc, options);
             res.send(result)
         })
@@ -175,10 +182,6 @@ async function run() {
         })
         app.get('/myproduct', verifyJwt, async (req, res) => {
             const email = req.query.email;
-            // const decodedEmail = req.decoded.email
-            // if (email !== decodedEmail) {
-            //     return res.status(401).send('Unathorize access')
-            // }
             const query = {
                 email: email,
             }
